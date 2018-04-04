@@ -7,10 +7,11 @@
 #//-------------------------------------------
 
 FONT      = "devicon.ttf"
-FONT_SIZE = 128 #pt
-
-Dir.mkdir "png_#{FONT_SIZE}"
-#//-------------------------------------------
+FONT_SIZES = [
+  64,
+  128,
+  600
+]
 
 inames = { 
   "\uE600" => "react-original-wordmark",
@@ -249,16 +250,17 @@ inames = {
   "\uEc04" => "zend-plain"
 }
 
-# (FIRST..LAST).step do |a|
-#   cmd = "convert -background none -fill black -font #{FONT} -pointsize #{FONT_SIZE} label:\"#{a}\"  #{inames[a]}.png"
-#   puts cmd
-#   system(cmd) if ARGV[0]
-# end
+#//-------------------------------------------
 
-inames.each do |key, value|
-	cmd = "convert -background none -fill black -font #{FONT} -pointsize #{FONT_SIZE} label:\"#{key}\"  png_#{FONT_SIZE}/#{value}.png"
-    puts cmd
-    system(cmd) if ARGV[0]
+for font_size in FONT_SIZES
+  directory = "png_#{font_size}"
+  Dir.mkdir(directory) unless File.exists?(directory)
+
+  inames.each do |key, value|
+    cmd = "convert -background none -fill black -font #{FONT} -pointsize #{font_size} label:\"#{key}\"  #{directory}/#{value}.png"
+      puts cmd
+      system(cmd) if ARGV[0]
+  end
 end
 
 print sprintf("If you want to execute these commands, try this: \nruby %s 1\n", File.basename(__FILE__)) if ARGV.length == 0
